@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-boot-config
+  namespace: eshop-namespace
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-db-service:5432/postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: admin
+
