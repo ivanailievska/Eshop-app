@@ -1,10 +1,19 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kiii-project-secret
+  namespace: kiii
+type: Opaque
+data:
+  password: cG9zdGdyZXM=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: spring-boot-app
   namespace: eshop-namespace
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: spring-boot-app
@@ -16,9 +25,20 @@ spec:
       containers:
         - name: spring-boot-container
           image: ivanailievska/kiii-eshop-app:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
                 name: spring-boot-config
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kiii-project-secret
+                  key: password
 
